@@ -4,6 +4,7 @@ import Landing    from './pages/Landing'
 import Explore    from './pages/Explore'
 import Profile    from './pages/Profile'
 import CreateTrip from './pages/CreateTrip'
+import NotFound   from './pages/NotFound'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/explore" element={<Explore />}    />
         <Route path="/profile" element={<Profile />}    />
         <Route path="/create"  element={<CreateTrip />} />
+        <Route path="*"        element={<NotFound />}   />
       </Routes>
     </BrowserRouter>
   )
