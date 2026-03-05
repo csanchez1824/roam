@@ -4,28 +4,32 @@ import { supabase } from '../supabase'
 
 function Explore() {
   const [trips, setTrips] = useState([])
+  const [search, setSearch] = useState('')
+  const [activeTab, setActiveTab] = useState('🆕 Newest')
+  const [activeTag, setActiveTag] = useState(null)
 
   useEffect(() => {
     async function fetchTrips() {
-      const { data, error } = await supabase
-        .from('trips')
-        .select('*')
-        .order('created_at', { ascending: false })
+      let query = supabase.from('trips').select('*')
+      if (search) query = query.ilike('destination', `%${search}%`)
+      if (activeTag) query = query.ilike('tags', `%${activeTag}%`)
+      if (activeTab === '🆕 Newest') query = query.order('created_at', { ascending: false })
+      else if (activeTab === '💸 Budget') query = query.order('total_cost', { ascending: true })
+      else if (activeTab === '💎 Luxury') query = query.order('total_cost', { ascending: false })
+      const { data, error } = await query
       if (!error) setTrips(data)
     }
     fetchTrips()
-  }, [])
+  }, [search, activeTab, activeTag])
 
   return (
     <div style={{ fontFamily: 'DM Sans, sans-serif', background: '#f0f2f5', minHeight: '100vh' }}>
 
-      {/* ── HERO ── */}
+      {/* HERO */}
       <div style={{ background: 'linear-gradient(135deg, #0a1628 0%, #0f2545 40%, #0a3d62 100%)', padding: '64px 56px', display: 'grid', gridTemplateColumns: '1fr 1fr', alignItems: 'center', minHeight: '380px', position: 'relative', overflow: 'hidden' }}>
-
         {[...Array(20)].map((_, i) => (
           <div key={i} style={{ position: 'absolute', width: i % 3 === 0 ? '2px' : '1px', height: i % 3 === 0 ? '2px' : '1px', background: 'rgba(255,255,255,0.7)', borderRadius: '50%', top: `${Math.sin(i * 137.5) * 50 + 50}%`, left: `${Math.cos(i * 137.5) * 50 + 50}%` }} />
         ))}
-
         <div style={{ position: 'relative', zIndex: 2 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.8)', fontSize: '0.75rem', fontWeight: '500', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '6px 14px', borderRadius: '100px', marginBottom: '20px' }}>
             <span style={{ width: '6px', height: '6px', background: '#31a24c', borderRadius: '50%', display: 'inline-block' }} />
@@ -46,55 +50,49 @@ function Explore() {
             ))}
           </div>
         </div>
-
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ width: '260px', height: '260px', borderRadius: '50%', background: 'radial-gradient(circle at 35% 35%, #1a6bb5, #0a2a52 60%, #040f1a)', boxShadow: '0 0 60px rgba(26,107,181,0.4)' }}>
-          </div>
+          <div style={{ width: '260px', height: '260px', borderRadius: '50%', background: 'radial-gradient(circle at 35% 35%, #1a6bb5, #0a2a52 60%, #040f1a)', boxShadow: '0 0 60px rgba(26,107,181,0.4)' }} />
         </div>
       </div>
 
-      {/* ── FILTER TABS ── */}
+      {/* SEARCH + FILTER TABS */}
       <div style={{ background: 'white', borderBottom: '1px solid #dde1e7', padding: '0 28px', position: 'sticky', top: '60px', zIndex: 100 }}>
+        <div style={{ padding: '12px 0 0' }}>
+          <input
+            placeholder="🔍 Search by destination..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{ width: '100%', padding: '10px 16px', border: '1px solid #dde1e7', borderRadius: '8px', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', outline: 'none', background: '#f0f2f5' }}
+          />
+        </div>
         <div style={{ display: 'flex', overflowX: 'auto' }}>
-          {['🔥 Trending', '✨ Featured', '🆕 Newest', '💸 Budget', '💎 Luxury', '🎒 Solo', '👨‍👩‍👧 Family'].map((tab, i) => (
-            <div key={tab} style={{ padding: '16px 20px', fontSize: '0.85rem', fontWeight: '500', color: i === 0 ? '#0082fb' : '#65676b', borderBottom: i === 0 ? '2px solid #0082fb' : '2px solid transparent', cursor: 'pointer', whiteSpace: 'nowrap' }}>{tab}</div>
+          {['🔥 Trending', '✨ Featured', '🆕 Newest', '💸 Budget', '💎 Luxury', '🎒 Solo', '👨‍👩‍👧 Family'].map((tab) => (
+            <div key={tab} onClick={() => setActiveTab(tab)} style={{ padding: '16px 20px', fontSize: '0.85rem', fontWeight: '500', color: activeTab === tab ? '#0082fb' : '#65676b', borderBottom: activeTab === tab ? '2px solid #0082fb' : '2px solid transparent', cursor: 'pointer', whiteSpace: 'nowrap' }}>{tab}</div>
+          ))}
+        </div>
+        <div style={{ display: 'flex', gap: '8px', padding: '10px 0 12px', overflowX: 'auto' }}>
+          {['🏖️ Beach', '🏔️ Mountains', '🌿 Nature', '🏙️ City', '🕌 Culture', '🍜 Food', '🎒 Backpacking', '💎 Luxury', '🏄 Adventure'].map(tag => (
+            <button key={tag} onClick={() => setActiveTag(activeTag === tag ? null : tag)} style={{ padding: '5px 14px', borderRadius: '100px', whiteSpace: 'nowrap', border: `1.5px solid ${activeTag === tag ? '#0082fb' : '#dde1e7'}`, background: activeTag === tag ? '#e7f3ff' : 'white', color: activeTag === tag ? '#0082fb' : '#65676b', fontSize: '0.78rem', fontWeight: activeTag === tag ? '600' : '400', cursor: 'pointer' }}>{tag}</button>
           ))}
         </div>
       </div>
 
-      {/* ── MAIN BODY ── */}
+      {/* MAIN BODY */}
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '28px 24px 80px', display: 'grid', gridTemplateColumns: '1fr 280px', gap: '24px' }}>
 
-        {/* MAIN FEED */}
         <div>
           <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.3rem', marginBottom: '16px' }}>⭐ Trip of the Week</h2>
-
-          {/* Featured trip */}
           <div style={{ borderRadius: '14px', overflow: 'hidden', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.10)', marginBottom: '24px', cursor: 'pointer' }}>
             <div style={{ height: '280px', position: 'relative', background: 'linear-gradient(135deg, #1a8a5a, #7ab8a0)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '6rem' }}>
               🌿
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65), transparent 50%)' }} />
-              <div style={{ position: 'absolute', top: '16px', left: '16px', display: 'flex', gap: '8px' }}>
-                {['🌿 Nature', '🏄 Adventure', '💸 Budget'].map(tag => (
-                  <span key={tag} style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)', color: 'white', fontSize: '0.72rem', padding: '4px 10px', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.25)' }}>{tag}</span>
-                ))}
-              </div>
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '24px', zIndex: 2 }}>
                 <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.8rem', color: 'white', marginBottom: '6px' }}>12 Days in Costa Rica</div>
                 <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.82rem' }}>@mia.travels · ❤️ 1,247 likes</div>
               </div>
             </div>
-            <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #dde1e7' }}>
-              <div style={{ display: 'flex', gap: '4px' }}>
-                {['❤️ 1,247', '💬 83', '🔗 Share', '🔖 Save'].map(btn => (
-                  <button key={btn} style={{ background: 'none', border: 'none', padding: '7px 10px', borderRadius: '7px', fontSize: '0.8rem', color: '#65676b', cursor: 'pointer' }}>{btn}</button>
-                ))}
-              </div>
-              <button style={{ background: '#e7f3ff', color: '#0082fb', border: '1.5px solid #0082fb', padding: '7px 18px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: '600', cursor: 'pointer' }}>Follow @mia.travels</button>
-            </div>
           </div>
 
-          {/* Real trips from database */}
           <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.3rem' }}>🌍 Latest Trips</h2>
             <Link to="/create" style={{ background: '#0082fb', color: 'white', padding: '8px 18px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: '600', textDecoration: 'none' }}>✚ Post a Trip</Link>
@@ -104,8 +102,8 @@ function Explore() {
             {trips.length === 0 ? (
               <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 20px', color: '#65676b', background: 'white', borderRadius: '14px', border: '1px solid #dde1e7' }}>
                 <div style={{ fontSize: '3rem', marginBottom: '12px' }}>🌍</div>
-                <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.3rem', marginBottom: '8px' }}>No trips yet</div>
-                <p style={{ fontSize: '0.85rem', fontWeight: '300', marginBottom: '20px' }}>Be the first to share an adventure!</p>
+                <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.3rem', marginBottom: '8px' }}>No trips found</div>
+                <p style={{ fontSize: '0.85rem', fontWeight: '300', marginBottom: '20px' }}>Try a different search or be the first to post!</p>
                 <Link to="/create" style={{ background: '#0082fb', color: 'white', padding: '10px 24px', borderRadius: '8px', fontSize: '0.875rem', fontWeight: '600', textDecoration: 'none' }}>✚ Post a Trip</Link>
               </div>
             ) : (
@@ -146,9 +144,8 @@ function Explore() {
             <div style={{ fontSize: '2rem', marginBottom: '10px' }}>✈️</div>
             <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.1rem', color: 'white', marginBottom: '6px' }}>Share your own trip</div>
             <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.5)', lineHeight: '1.5', marginBottom: '16px' }}>Join 8,000+ travelers already inspiring the world.</p>
-            <Link to="/create" style={{ display: 'block', background: '#0082fb', color: 'white', padding: '11px', borderRadius: '8px', fontSize: '0.875rem', fontWeight: '600', textDecoration: 'none', marginBottom: '8px' }}>Create a free account</Link>
+            <Link to="/create" style={{ display: 'block', background: '#0082fb', color: 'white', padding: '11px', borderRadius: '8px', fontSize: '0.875rem', fontWeight: '600', textDecoration: 'none' }}>Post a Trip</Link>
           </div>
-
           <div style={{ background: 'white', borderRadius: '14px', border: '1px solid #dde1e7', overflow: 'hidden' }}>
             <div style={{ padding: '14px 18px', fontSize: '0.78rem', fontWeight: '700', color: '#65676b', textTransform: 'uppercase', letterSpacing: '0.08em', borderBottom: '1px solid #dde1e7' }}>📈 Trending Destinations</div>
             <div style={{ padding: '0 18px' }}>
