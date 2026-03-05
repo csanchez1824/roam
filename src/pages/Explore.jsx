@@ -7,20 +7,53 @@ function Explore() {
   const [search, setSearch] = useState('')
   const [activeTab, setActiveTab] = useState('🆕 Newest')
   const [activeTag, setActiveTag] = useState(null)
+  const [likes, setLikes] = useState({})
+  const [userLikes, setUserLikes] = useState({})
 
   useEffect(() => {
-    async function fetchTrips() {
+    async function fetchData() {
       let query = supabase.from('trips').select('*')
       if (search) query = query.ilike('destination', `%${search}%`)
       if (activeTag) query = query.ilike('tags', `%${activeTag}%`)
       if (activeTab === '🆕 Newest') query = query.order('created_at', { ascending: false })
       else if (activeTab === '💸 Budget') query = query.order('total_cost', { ascending: true })
       else if (activeTab === '💎 Luxury') query = query.order('total_cost', { ascending: false })
-      const { data, error } = await query
-      if (!error) setTrips(data)
+      const { data: tripData } = await query
+      if (tripData) setTrips(tripData)
+
+      const { data: likesData } = await supabase.from('likes').select('trip_id')
+      if (likesData) {
+        const counts = {}
+        likesData.forEach(l => { counts[l.trip_id] = (counts[l.trip_id] || 0) + 1 })
+        setLikes(counts)
+      }
+
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: userLikesData } = await supabase.from('likes').select('trip_id').eq('user_id', user.id)
+        if (userLikesData) {
+          const ul = {}
+          userLikesData.forEach(l => { ul[l.trip_id] = true })
+          setUserLikes(ul)
+        }
+      }
     }
-    fetchTrips()
+    fetchData()
   }, [search, activeTab, activeTag])
+
+  async function handleLike(tripId) {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) { window.location.href = '/auth'; return }
+    if (userLikes[tripId]) {
+      await supabase.from('likes').delete().eq('trip_id', tripId).eq('user_id', user.id)
+      setUserLikes(ul => ({ ...ul, [tripId]: false }))
+      setLikes(l => ({ ...l, [tripId]: (l[tripId] || 1) - 1 }))
+    } else {
+      await supabase.from('likes').insert({ trip_id: tripId, user_id: user.id })
+      setUserLikes(ul => ({ ...ul, [tripId]: true }))
+      setLikes(l => ({ ...l, [tripId]: (l[tripId] || 0) + 1 }))
+    }
+  }
 
   return (
     <div style={{ fontFamily: 'DM Sans, sans-serif', background: '#f0f2f5', minHeight: '100vh' }}>
@@ -58,12 +91,7 @@ function Explore() {
       {/* SEARCH + FILTER TABS */}
       <div style={{ background: 'white', borderBottom: '1px solid #dde1e7', padding: '0 28px', position: 'sticky', top: '60px', zIndex: 100 }}>
         <div style={{ padding: '12px 0 0' }}>
-          <input
-            placeholder="🔍 Search by destination..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            style={{ width: '100%', padding: '10px 16px', border: '1px solid #dde1e7', borderRadius: '8px', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', outline: 'none', background: '#f0f2f5' }}
-          />
+          <input placeholder="🔍 Search by destination..." value={search} onChange={e => setSearch(e.target.value)} style={{ width: '100%', padding: '10px 16px', border: '1px solid #dde1e7', borderRadius: '8px', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', outline: 'none', background: '#f0f2f5' }} />
         </div>
         <div style={{ display: 'flex', overflowX: 'auto' }}>
           {['🔥 Trending', '✨ Featured', '🆕 Newest', '💸 Budget', '💎 Luxury', '🎒 Solo', '👨‍👩‍👧 Family'].map((tab) => (
@@ -82,7 +110,7 @@ function Explore() {
 
         <div>
           <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.3rem', marginBottom: '16px' }}>⭐ Trip of the Week</h2>
-          <div style={{ borderRadius: '14px', overflow: 'hidden', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.10)', marginBottom: '24px', cursor: 'pointer' }}>
+          <div style={{ borderRadius: '14px', overflow: 'hidden', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.10)', marginBottom: '24px' }}>
             <div style={{ height: '280px', position: 'relative', background: 'linear-gradient(135deg, #1a8a5a, #7ab8a0)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '6rem' }}>
               🌿
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65), transparent 50%)' }} />
@@ -129,7 +157,9 @@ function Explore() {
                         <div style={{ fontSize: '0.9rem', fontWeight: '600' }}>${card.total_cost?.toLocaleString()}</div>
                         <div style={{ fontSize: '0.68rem', color: '#65676b' }}>per person</div>
                       </div>
-                      <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.78rem', color: '#65676b' }}>❤️ Like</button>
+                      <button onClick={() => handleLike(card.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.78rem', color: userLikes[card.id] ? '#e0245e' : '#65676b', fontWeight: userLikes[card.id] ? '600' : '400' }}>
+                        {userLikes[card.id] ? '❤️' : '🤍'} {likes[card.id] || 0}
+                      </button>
                     </div>
                   </div>
                 </div>
