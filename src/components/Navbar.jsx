@@ -1,6 +1,10 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 function Navbar() {
+  const location = useLocation()
+  
+  if (location.pathname === '/auth') return null
+
   return (
     <nav style={{
       position: 'sticky',
@@ -17,14 +21,12 @@ function Navbar() {
       fontFamily: 'DM Sans, sans-serif',
     }}>
 
-      {/* Logo */}
       <Link to="/" style={{ textDecoration: 'none' }}>
         <span style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#1c1e21' }}>
           ro<span style={{ color: '#0082fb', fontStyle: 'italic' }}>am</span>
         </span>
       </Link>
 
-      {/* Nav Links */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <Link to="/" style={linkStyle}>Home</Link>
         <Link to="/explore" style={linkStyle}>Explore</Link>
