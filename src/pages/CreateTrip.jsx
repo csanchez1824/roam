@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { supabase } from '../supabase'
 
 function CreateTrip() {
   const [step, setStep] = useState(1)
@@ -27,6 +28,31 @@ function CreateTrip() {
 
   const totalCost = ['flights','accommodation','activities','food','transport','other']
     .reduce((sum, k) => sum + (parseFloat(form[k]) || 0), 0)
+    const navigate = useNavigate()
+
+async function handlePublish() {
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  const { error } = await supabase.from('trips').insert({
+    user_id:        user.id,
+    title:          form.title,
+    destination:    form.destination,
+    description:    form.description,
+    start_date:     form.startDate,
+    end_date:       form.endDate,
+    status:         form.status,
+    tags:           form.tags.join(', '),
+    total_cost:     totalCost,
+    transport_type: form.transportType,
+    stay_type:      form.stayType,
+  })
+
+  if (error) {
+    alert('Error saving trip: ' + error.message)
+  } else {
+    setStep(5)
+  }
+}
 
   const tags = ['🏖️ Beach','🏔️ Mountains','🌿 Nature','🏙️ City','🕌 Culture','🍜 Food','🎒 Backpacking','💎 Luxury','💸 Budget','👨‍👩‍👧 Family','💑 Couples','🧘 Wellness','🏄 Adventure','📸 Photography']
 
@@ -232,7 +258,7 @@ function CreateTrip() {
                 ))}
               </div>
 
-              <button onClick={() => setStep(5)} style={{ width: '100%', background: '#0082fb', color: 'white', border: 'none', padding: '14px', borderRadius: '10px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer' }}>
+              <button onClick={handlePublish} style={{ width: '100%', background: '#0082fb', color: 'white', border: 'none', padding: '14px', borderRadius: '10px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer' }}>
                 🚀 Publish Trip
               </button>
             </div>
