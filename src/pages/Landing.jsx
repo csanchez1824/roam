@@ -181,7 +181,7 @@ function Landing() {
         }}>
           Three steps to your <em style={{ color: '#0082fb' }}>travel profile.</em>
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '48px' }}>
+        <div className="how-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '48px' }}>
           {[
             { num: '01', title: 'Create your account', desc: 'Sign up for free and build your personal travel profile. Add a photo, write your bio, and let the world know where you\'ve been.' },
             { num: '02', title: 'Log your trips',       desc: 'For each vacation, add your destination, daily events, where you stayed, how you got around, and a full cost breakdown.' },

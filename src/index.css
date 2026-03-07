@@ -4,66 +4,56 @@
   padding: 0;
 }
 
-html {
-  overflow-x: hidden;
+html, body {
   width: 100%;
-}
-
-body {
+  overflow-x: hidden;
   font-family: 'DM Sans', sans-serif;
   background: #f0f2f5;
   color: #1c1e21;
   min-height: 100vh;
-  overflow-x: hidden;
-  width: 100%;
-  max-width: 100vw;
-}
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: #f0f2f5;
-  color: #1c1e21;
-  min-height: 100vh;
-  overflow-x: hidden;
 }
 
 a { text-decoration: none; }
 
+/* ── DESKTOP ── */
+.nav-mobile { display: none !important; }
+
 /* ── MOBILE ── */
 @media (max-width: 768px) {
-  * {
-    max-width: 100% !important;
-  }
-  
-  body, html {
-    overflow-x: hidden !important;
-  }
 
-  /* Bigger tap targets */
-  button, a {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
+  /* Fix overflow */
+  * { max-width: 100% !important; }
 
   /* Navbar */
   nav { padding: 0 16px !important; }
   .nav-links { display: none !important; }
-  .nav-mobile { display: flex !important; }
+  .nav-mobile { 
+    display: flex !important; 
+    min-height: auto !important;
+  }
 
-  /* Landing hero */
+  /* Landing hero — single column */
   .hero-grid {
     grid-template-columns: 1fr !important;
     min-height: auto !important;
   }
   .hero-collage { display: none !important; }
   .hero-text {
-    padding: 48px 24px !important;
+    padding: 40px 20px !important;
+    text-align: center !important;
+    align-items: center !important;
   }
   .hero-text h1 {
-    font-size: 2.2rem !important;
+    font-size: 2rem !important;
+  }
+  .hero-text p {
+    max-width: 100% !important;
+  }
+
+  /* How it works */
+  .how-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
   }
 
   /* Explore hero */
@@ -73,8 +63,6 @@ a { text-decoration: none; }
     min-height: auto !important;
   }
   .explore-globe { display: none !important; }
-
-  /* Stats bar */
   .stats-bar {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
@@ -85,30 +73,31 @@ a { text-decoration: none; }
   .main-layout {
     grid-template-columns: 1fr !important;
     padding: 16px 16px 60px !important;
+    gap: 16px !important;
   }
   .profile-layout {
     grid-template-columns: 1fr !important;
     padding: 16px 16px 60px !important;
+    gap: 16px !important;
   }
 
-  /* Trip grids */
+  /* Trip grid single column */
   .trip-grid {
     grid-template-columns: 1fr !important;
   }
 
-  /* How it works section */
-  .how-grid {
-    grid-template-columns: 1fr !important;
-  }
+  /* Hide sidebar on mobile */
+  .sidebar-hide { display: none !important; }
 
-  /* Sidebar hidden on mobile */
-  .sidebar-hide {
-    display: none !important;
-  }
-
-  /* General padding fix */
+  /* Section padding */
   section {
     padding-left: 20px !important;
     padding-right: 20px !important;
+  }
+
+  /* Bigger tap targets for buttons */
+  button { 
+    min-height: 44px !important;
+    font-size: 0.95rem !important;
   }
 }
