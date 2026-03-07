@@ -210,6 +210,7 @@ export default function Landing() {
           <input
             placeholder="Email address"
             type="email"
+            autoComplete="off"
             value={form.email}
             onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
             style={inputStyle}
@@ -217,6 +218,7 @@ export default function Landing() {
           <input
             placeholder="Password"
             type="password"
+            autoComplete="new-password"
             value={form.password}
             onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
             onKeyDown={e => e.key === 'Enter' && handleSubmit()}
