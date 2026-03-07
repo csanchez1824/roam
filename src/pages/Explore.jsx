@@ -74,7 +74,7 @@ function Explore() {
           <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '1rem', fontWeight: '300', maxWidth: '420px', lineHeight: '1.65', marginBottom: '32px' }}>
             Real destinations. Real costs. Real people who've already been there.
           </p>
-          <div style={{ display: 'inline-flex', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden' }}>
+          <div className="stats-bar" style={{ display: 'inline-flex', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px', overflow: 'hidden' }}>
             {[{ n: '24,817', l: 'Trips Posted' }, { n: '143', l: 'Countries' }, { n: '8,302', l: 'Travelers' }, { n: '$1,840', l: 'Avg Cost' }].map((s, i) => (
               <div key={s.l} style={{ padding: '14px 24px', textAlign: 'center', borderRight: i < 3 ? '1px solid rgba(255,255,255,0.1)' : 'none' }}>
                 <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.4rem', color: 'white' }}>{s.n}</div>
@@ -169,7 +169,7 @@ function Explore() {
         </div>
 
         {/* SIDEBAR */}
-        <aside style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <aside className="sidebar-hide" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div style={{ background: 'linear-gradient(135deg, #0a1628, #0f2545)', borderRadius: '14px', padding: '24px 20px', textAlign: 'center' }}>
             <div style={{ fontSize: '2rem', marginBottom: '10px' }}>✈️</div>
             <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.1rem', color: 'white', marginBottom: '6px' }}>Share your own trip</div>

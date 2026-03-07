@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 function Landing() {
   return (
-    <div style={{ fontFamily: 'DM Sans, sans-serif' }}>
+    <div className="hero-grid" style={{ fontFamily: 'DM Sans, sans-serif' }}>
 
       {/* ── HERO ── */}
       <section className="hero-grid" style={{
@@ -13,7 +13,7 @@ function Landing() {
       }}>
 
         {/* Left side — text */}
-        <div style={{
+        <div className="hero-text" style={{
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',

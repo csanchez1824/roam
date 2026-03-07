@@ -9,90 +9,75 @@ body {
   background: #f0f2f5;
   color: #1c1e21;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-a {
-  text-decoration: none;
-}
+a { text-decoration: none; }
 
-/* ── MOBILE RESPONSIVE ── */
-
-/* Navbar */
+/* ── MOBILE ── */
 @media (max-width: 768px) {
-  nav {
-    padding: 0 16px !important;
-  }
-}
 
-/* Landing hero — stack on mobile */
-@media (max-width: 768px) {
+  /* Navbar */
+  nav { padding: 0 16px !important; }
+  .nav-links { display: none !important; }
+  .nav-mobile { display: flex !important; }
+
+  /* Landing hero */
   .hero-grid {
     grid-template-columns: 1fr !important;
+    min-height: auto !important;
   }
-  .hero-collage {
-    display: none !important;
+  .hero-collage { display: none !important; }
+  .hero-text {
+    padding: 48px 24px !important;
   }
   .hero-text h1 {
-    font-size: 2.5rem !important;
+    font-size: 2.2rem !important;
   }
-}
 
-/* Explore hero */
-@media (max-width: 768px) {
+  /* Explore hero */
   .explore-hero {
     grid-template-columns: 1fr !important;
-    padding: 40px 24px !important;
+    padding: 40px 20px !important;
+    min-height: auto !important;
   }
-  .explore-globe {
-    display: none !important;
-  }
-  .explore-stats {
-    flex-wrap: wrap !important;
-  }
-}
+  .explore-globe { display: none !important; }
 
-/* Main layout — sidebar below content on mobile */
-@media (max-width: 768px) {
-  .main-layout {
-    grid-template-columns: 1fr !important;
-  }
-  .sidebar {
-    order: 2;
-  }
-  .main-content {
-    order: 1;
-  }
-}
-
-/* Trip grid — single column on mobile */
-@media (max-width: 640px) {
-  .trip-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-/* Profile layout */
-@media (max-width: 768px) {
-  .profile-layout {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-/* Stats bar on explore hero */
-@media (max-width: 768px) {
+  /* Stats bar */
   .stats-bar {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     width: 100% !important;
   }
-}
 
-/* Navbar links — hide on mobile */
-@media (max-width: 640px) {
-  .nav-links {
+  /* Main layouts */
+  .main-layout {
+    grid-template-columns: 1fr !important;
+    padding: 16px 16px 60px !important;
+  }
+  .profile-layout {
+    grid-template-columns: 1fr !important;
+    padding: 16px 16px 60px !important;
+  }
+
+  /* Trip grids */
+  .trip-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* How it works section */
+  .how-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Sidebar hidden on mobile */
+  .sidebar-hide {
     display: none !important;
   }
-  .nav-mobile {
-    display: flex !important;
+
+  /* General padding fix */
+  section {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
   }
 }
