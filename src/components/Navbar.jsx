@@ -23,6 +23,7 @@ function Navbar() {
   }
 
   if (location.pathname === '/auth') return null
+  if (location.pathname === '/') return null
 
   return (
     <nav style={{
