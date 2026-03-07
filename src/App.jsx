@@ -7,7 +7,8 @@ import Profile         from './pages/Profile'
 import CreateTrip      from './pages/CreateTrip'
 import Auth            from './pages/Auth'
 import EditProfile     from './pages/EditProfile'
-import Discover from './pages/Discover'
+import Discover        from './pages/Discover'
+import UserProfile     from './pages/UserProfile'
 import NotFound        from './pages/NotFound'
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
       <Routes>
         <Route path="/"             element={<Landing />}    />
         <Route path="/explore"      element={<Explore />}    />
-        <Route path="/discover" element={<Discover />}       />
+        <Route path="/user/:id"     element={<UserProfile />} />
+        <Route path="/discover"     element={<Discover />}   />
         <Route path="/auth"         element={<Auth />}       />
         <Route path="/profile"      element={
           <ProtectedRoute><Profile /></ProtectedRoute>
