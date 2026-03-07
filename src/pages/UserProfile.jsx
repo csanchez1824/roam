@@ -8,9 +8,15 @@ function UserProfile() {
   const [trips, setTrips] = useState([])
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [followCount, setFollowCount] = useState(0)
+  const [currentUser, setCurrentUser] = useState(null)
 
   useEffect(() => {
     async function fetchData() {
+      const { data: { user } } = await supabase.auth.getUser()
+      setCurrentUser(user)
+
       const { data: profileData } = await supabase
         .from('profiles')
         .select('*')
@@ -27,10 +33,46 @@ function UserProfile() {
         .order('created_at', { ascending: false })
 
       if (tripData) setTrips(tripData)
+
+      const { data: followsData } = await supabase
+        .from('follows')
+        .select('*')
+        .eq('following_id', id)
+      setFollowCount(followsData?.length || 0)
+
+      if (user) {
+        const { data: followData } = await supabase
+          .from('follows')
+          .select('*')
+          .eq('follower_id', user.id)
+          .eq('following_id', id)
+          .single()
+        setIsFollowing(!!followData)
+      }
+
       setLoading(false)
     }
     fetchData()
   }, [id])
+
+  async function handleFollow() {
+    if (!currentUser) { window.location.href = '/'; return }
+    if (currentUser.id === id) return
+    if (isFollowing) {
+      await supabase.from('follows').delete()
+        .eq('follower_id', currentUser.id)
+        .eq('following_id', id)
+      setIsFollowing(false)
+      setFollowCount(c => c - 1)
+    } else {
+      await supabase.from('follows').insert({
+        follower_id: currentUser.id,
+        following_id: id
+      })
+      setIsFollowing(true)
+      setFollowCount(c => c + 1)
+    }
+  }
 
   if (loading) return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', fontFamily: 'DM Sans, sans-serif', gap: '16px' }}>
@@ -70,9 +112,8 @@ function UserProfile() {
               {profile?.bio && <p style={{ fontSize: '0.82rem', color: '#1c1e21', lineHeight: '1.6', marginBottom: '10px', fontWeight: '300' }}>{profile.bio}</p>}
               {profile?.location && <div style={{ fontSize: '0.78rem', color: '#65676b', marginBottom: '16px' }}>📍 {profile.location}</div>}
 
-              {/* Stats */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '16px', padding: '12px 0', borderTop: '1px solid #dde1e7', borderBottom: '1px solid #dde1e7' }}>
-                {[{ n: trips.length, l: 'Trips' }, { n: '0', l: 'Followers' }, { n: '0', l: 'Following' }].map(s => (
+                {[{ n: trips.length, l: 'Trips' }, { n: followCount, l: 'Followers' }, { n: '0', l: 'Following' }].map(s => (
                   <div key={s.l} style={{ textAlign: 'center' }}>
                     <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.2rem' }}>{s.n}</div>
                     <div style={{ fontSize: '0.7rem', color: '#65676b' }}>{s.l}</div>
@@ -80,13 +121,26 @@ function UserProfile() {
                 ))}
               </div>
 
-              <Link to="/discover" style={{ display: 'block', textAlign: 'center', background: '#f0f2f5', color: '#1c1e21', padding: '9px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: '600', textDecoration: 'none' }}>
-                ← Back to Discover
-              </Link>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {currentUser && currentUser.id !== id && (
+                  <button onClick={handleFollow} style={{
+                    display: 'block', width: '100%', textAlign: 'center',
+                    background: isFollowing ? 'white' : '#0082fb',
+                    color: isFollowing ? '#1c1e21' : 'white',
+                    border: isFollowing ? '1px solid #dde1e7' : 'none',
+                    padding: '9px', borderRadius: '8px',
+                    fontSize: '0.82rem', fontWeight: '600', cursor: 'pointer'
+                  }}>
+                    {isFollowing ? '✓ Following' : '+ Follow'}
+                  </button>
+                )}
+                <Link to="/discover" style={{ display: 'block', textAlign: 'center', background: '#f0f2f5', color: '#1c1e21', padding: '9px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: '600', textDecoration: 'none' }}>
+                  ← Back to Discover
+                </Link>
+              </div>
             </div>
           </div>
 
-          {/* Destinations */}
           {trips.length > 0 && (
             <div style={{ background: 'white', borderRadius: '14px', border: '1px solid #dde1e7', overflow: 'hidden' }}>
               <div style={{ padding: '14px 18px', fontSize: '0.78rem', fontWeight: '700', color: '#65676b', textTransform: 'uppercase', letterSpacing: '0.08em', borderBottom: '1px solid #dde1e7' }}>🗺️ Destinations · {trips.length}</div>
