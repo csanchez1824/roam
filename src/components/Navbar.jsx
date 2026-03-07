@@ -34,11 +34,27 @@ function Navbar() {
       fontFamily: 'DM Sans, sans-serif',
     }}>
 
-      <Link to="/" style={{ textDecoration: 'none' }}>
-        <span style={{ fontSize: '1.4rem', fontWeight: 'bold', color: '#1c1e21' }}>
-          ro<span style={{ color: '#0082fb', fontStyle: 'italic' }}>am</span>
-        </span>
-      </Link>
+      <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+  {/* Custom SVG Logo */}
+  <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Globe circle */}
+    <circle cx="18" cy="18" r="16" stroke="#0082fb" strokeWidth="2" fill="none"/>
+    {/* Latitude lines */}
+    <ellipse cx="18" cy="18" rx="8" ry="16" stroke="#0082fb" strokeWidth="1.5" fill="none" opacity="0.4"/>
+    {/* Horizontal line */}
+    <line x1="2" y1="18" x2="34" y2="18" stroke="#0082fb" strokeWidth="1.5" opacity="0.4"/>
+    {/* Plane / arrow showing movement */}
+    <path d="M8 18 L22 10 L20 18 L22 26 Z" fill="#0082fb" opacity="0.9"/>
+    {/* Speed lines */}
+    <line x1="2" y1="14" x2="10" y2="14" stroke="#0082fb" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+    <line x1="2" y1="18" x2="7" y2="18" stroke="#0082fb" strokeWidth="1.5" strokeLinecap="round" opacity="0.3"/>
+    <line x1="2" y1="22" x2="10" y2="22" stroke="#0082fb" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+  </svg>
+  {/* Wordmark */}
+  <span style={{ fontSize: '1.6rem', fontWeight: '700', color: '#1c1e21', letterSpacing: '-0.03em', fontFamily: 'DM Serif Display, serif' }}>
+    R<span style={{ color: '#0082fb', fontStyle: 'italic' }}>oam</span>
+  </span>
+</Link>
 
       {/* Desktop links */}
       <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

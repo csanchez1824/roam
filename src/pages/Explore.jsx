@@ -4,6 +4,7 @@ import { supabase } from '../supabase'
 
 function Explore() {
   const [trips, setTrips] = useState([])
+  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [activeTab, setActiveTab] = useState('🆕 Newest')
   const [activeTag, setActiveTag] = useState(null)
@@ -20,6 +21,7 @@ function Explore() {
       else if (activeTab === '💎 Luxury') query = query.order('total_cost', { ascending: false })
       const { data: tripData } = await query
       if (tripData) setTrips(tripData)
+      setLoading(false)
 
       const { data: likesData } = await supabase.from('likes').select('trip_id')
       if (likesData) {
@@ -54,7 +56,22 @@ function Explore() {
       setLikes(l => ({ ...l, [tripId]: (l[tripId] || 0) + 1 }))
     }
   }
-
+if (loading) return (
+  <div style={{
+    display: 'flex', flexDirection: 'column',
+    alignItems: 'center', justifyContent: 'center',
+    minHeight: '100vh', fontFamily: 'DM Sans, sans-serif', gap: '16px'
+  }}>
+    <div style={{
+      width: '44px', height: '44px', borderRadius: '50%',
+      border: '3px solid #f0f2f5',
+      borderTop: '3px solid #0082fb',
+      animation: 'spin 0.8s linear infinite'
+    }} />
+    <div style={{ color: '#65676b', fontSize: '0.875rem', fontWeight: '300' }}>Finding trips...</div>
+    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+  </div>
+)
   return (
     <div style={{ fontFamily: 'DM Sans, sans-serif', background: '#f0f2f5', minHeight: '100vh' }}>
 

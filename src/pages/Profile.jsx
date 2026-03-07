@@ -33,10 +33,21 @@ function Profile() {
   }, [])
 
   if (loading) return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', fontFamily: 'DM Sans, sans-serif', color: '#65676b' }}>
-      Loading...
-    </div>
-  )
+  <div style={{
+    display: 'flex', flexDirection: 'column',
+    alignItems: 'center', justifyContent: 'center',
+    minHeight: '100vh', fontFamily: 'DM Sans, sans-serif', gap: '16px'
+  }}>
+    <div style={{
+      width: '44px', height: '44px', borderRadius: '50%',
+      border: '3px solid #f0f2f5',
+      borderTop: '3px solid #0082fb',
+      animation: 'spin 0.8s linear infinite'
+    }} />
+    <div style={{ color: '#65676b', fontSize: '0.875rem', fontWeight: '300' }}>Loading profile...</div>
+    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+  </div>
+)
 
   const initials = profile?.full_name
     ? profile.full_name.split(' ').map(n => n[0]).join('').toUpperCase()
