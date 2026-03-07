@@ -99,8 +99,19 @@ export default function Landing() {
 
         {/* Logo */}
         <div style={{ marginBottom: '32px', position: 'relative', zIndex: 2 }}>
-          <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '2.2rem', color: 'white', letterSpacing: '-0.03em' }}>
-            R<span style={{ color: '#7ab8fb', fontStyle: 'italic' }}>oam</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <svg width="42" height="42" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="16" stroke="#7ab8fb" strokeWidth="2" fill="none"/>
+              <ellipse cx="18" cy="18" rx="8" ry="16" stroke="#7ab8fb" strokeWidth="1.5" fill="none" opacity="0.4"/>
+              <line x1="2" y1="18" x2="34" y2="18" stroke="#7ab8fb" strokeWidth="1.5" opacity="0.4"/>
+              <path d="M8 18 L22 10 L20 18 L22 26 Z" fill="#7ab8fb" opacity="0.9"/>
+              <line x1="2" y1="14" x2="10" y2="14" stroke="#7ab8fb" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+              <line x1="2" y1="18" x2="7" y2="18" stroke="#7ab8fb" strokeWidth="1.5" strokeLinecap="round" opacity="0.3"/>
+              <line x1="2" y1="22" x2="10" y2="22" stroke="#7ab8fb" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+            </svg>
+            <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '2.2rem', color: 'white', letterSpacing: '-0.03em' }}>
+              R<span style={{ color: '#7ab8fb', fontStyle: 'italic' }}>oam</span>
+            </div>
           </div>
           <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.85rem', fontWeight: '300', marginTop: '4px' }}>
             The social network for travelers
