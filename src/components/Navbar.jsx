@@ -60,6 +60,7 @@ function Navbar() {
       <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <Link to="/" style={linkStyle}>Home</Link>
         <Link to="/explore" style={linkStyle}>Explore</Link>
+        <Link to="/discover" style={linkStyle}>Discover</Link>
         <Link to="/profile" style={linkStyle}>Profile</Link>
         {user ? (
           <>
@@ -90,6 +91,7 @@ function Navbar() {
         }}>
           <Link to="/" onClick={() => setMenuOpen(false)} style={mobileLinkStyle}>Home</Link>
           <Link to="/explore" onClick={() => setMenuOpen(false)} style={mobileLinkStyle}>Explore</Link>
+          <Link to="/discover" onClick={() => setMenuOpen(false)} style={mobileLinkStyle}>Discover</Link>
           <Link to="/profile" onClick={() => setMenuOpen(false)} style={mobileLinkStyle}>Profile</Link>
           {user ? (
             <>
