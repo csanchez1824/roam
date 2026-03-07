@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar          from './components/Navbar'
-import ProtectedRoute  from './components/ProtectedRoute'
+import ProtectedRoute  from './components/Protectedroute'
 import Landing         from './pages/Landing'
 import Explore         from './pages/Explore'
 import Profile         from './pages/Profile'
