@@ -4,6 +4,7 @@ import { supabase } from '../supabase'
 
 function Profile() {
   const [user, setUser] = useState(null)
+  const [profile, setProfile] = useState(null)
   const [trips, setTrips] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -11,6 +12,13 @@ function Profile() {
     async function fetchData() {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
+
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+      setProfile(profileData)
 
       const { data, error } = await supabase
         .from('trips')
@@ -30,11 +38,12 @@ function Profile() {
     </div>
   )
 
-  const initials = user?.user_metadata?.full_name
-    ? user.user_metadata.full_name.split(' ').map(n => n[0]).join('').toUpperCase()
+  const initials = profile?.full_name
+    ? profile.full_name.split(' ').map(n => n[0]).join('').toUpperCase()
     : user?.email?.[0].toUpperCase()
 
-  const displayName = user?.user_metadata?.full_name || user?.email
+  const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.email
+  const username = profile?.username ? `@${profile.username}` : user?.email
 
   return (
     <div style={{ fontFamily: 'DM Sans, sans-serif', background: '#f0f2f5', minHeight: '100vh' }}>
@@ -52,7 +61,13 @@ function Profile() {
             </div>
             <div style={{ padding: '44px 20px 20px' }}>
               <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.3rem', letterSpacing: '-0.02em' }}>{displayName}</div>
-              <div style={{ fontSize: '0.82rem', color: '#65676b', marginBottom: '16px' }}>{user?.email}</div>
+              <div style={{ fontSize: '0.82rem', color: '#65676b', marginBottom: '8px' }}>{username}</div>
+              {profile?.bio && (
+                <p style={{ fontSize: '0.82rem', color: '#1c1e21', lineHeight: '1.6', marginBottom: '10px', fontWeight: '300' }}>{profile.bio}</p>
+              )}
+              {profile?.location && (
+                <div style={{ fontSize: '0.78rem', color: '#65676b', marginBottom: '16px' }}>📍 {profile.location}</div>
+              )}
 
               {/* Stats */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '16px', padding: '12px 0', borderTop: '1px solid #dde1e7', borderBottom: '1px solid #dde1e7' }}>
@@ -64,11 +79,14 @@ function Profile() {
                 ))}
               </div>
 
-              <Link to="/create" style={{ display: 'block', textAlign: 'center', background: '#0082fb', color: 'white', border: 'none', padding: '9px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: '600', cursor: 'pointer', textDecoration: 'none' }}>✚ Post a Trip</Link>
+              {/* Edit Profile button */}
+              <Link to="/edit-profile" style={{ display: 'block', textAlign: 'center', background: '#0082fb', color: 'white', padding: '9px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: '600', textDecoration: 'none' }}>
+                ✏️ Edit Profile
+              </Link>
             </div>
           </div>
 
-          {/* Countries visited */}
+          {/* Destinations */}
           {trips.length > 0 && (
             <div style={{ background: 'white', borderRadius: '14px', border: '1px solid #dde1e7', overflow: 'hidden' }}>
               <div style={{ padding: '14px 18px', fontSize: '0.78rem', fontWeight: '700', color: '#65676b', textTransform: 'uppercase', letterSpacing: '0.08em', borderBottom: '1px solid #dde1e7' }}>🗺️ Destinations · {trips.length}</div>
@@ -88,8 +106,6 @@ function Profile() {
 
         {/* MAIN CONTENT */}
         <div>
-
-          {/* Tabs */}
           <div style={{ background: 'white', borderRadius: '14px', border: '1px solid #dde1e7', marginBottom: '20px', overflow: 'hidden' }}>
             <div style={{ display: 'flex', borderBottom: '1px solid #dde1e7' }}>
               {['✈️ My Trips', '🔖 Saved', 'ℹ️ About'].map((tab, i) => (
@@ -98,12 +114,11 @@ function Profile() {
             </div>
           </div>
 
-          {/* Trip cards */}
           {trips.length === 0 ? (
             <div style={{ background: 'white', borderRadius: '14px', border: '1px solid #dde1e7', padding: '60px 20px', textAlign: 'center' }}>
               <div style={{ fontSize: '3rem', marginBottom: '12px' }}>🌍</div>
               <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.3rem', marginBottom: '8px' }}>No trips yet</div>
-              <p style={{ fontSize: '0.85rem', color: '#65676b', fontWeight: '300', marginBottom: '20px' }}>Share your first adventure with the world!</p>
+              <p style={{ fontSize: '0.85rem', color: '#65676b', fontWeight: '300', marginBottom: '20px' }}>Share your first adventure!</p>
               <Link to="/create" style={{ background: '#0082fb', color: 'white', padding: '10px 24px', borderRadius: '8px', fontSize: '0.875rem', fontWeight: '600', textDecoration: 'none' }}>✚ Post a Trip</Link>
             </div>
           ) : (
@@ -138,15 +153,14 @@ function Profile() {
             </div>
           )}
 
-          {/* Post CTA */}
           <div style={{ marginTop: '20px', background: 'white', borderRadius: '14px', border: '1px solid #dde1e7', padding: '32px', textAlign: 'center' }}>
             <div style={{ fontSize: '2rem', marginBottom: '10px' }}>🗺️</div>
             <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.2rem', marginBottom: '8px' }}>Share another adventure</div>
             <p style={{ fontSize: '0.85rem', color: '#65676b', marginBottom: '20px', fontWeight: '300' }}>Your next trip is waiting to be told.</p>
             <Link to="/create" style={{ background: '#0082fb', color: 'white', padding: '10px 28px', borderRadius: '8px', fontSize: '0.875rem', fontWeight: '600', textDecoration: 'none' }}>✚ Post a Trip</Link>
           </div>
-
         </div>
+
       </div>
     </div>
   )

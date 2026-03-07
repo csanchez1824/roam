@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar          from './components/Navbar'
-import ProtectedRoute from './components/Protectedroute'
+import ProtectedRoute  from './components/ProtectedRoute'
 import Landing         from './pages/Landing'
 import Explore         from './pages/Explore'
 import Profile         from './pages/Profile'
 import CreateTrip      from './pages/CreateTrip'
 import Auth            from './pages/Auth'
+import EditProfile     from './pages/EditProfile'
 import NotFound        from './pages/NotFound'
 
 function App() {
@@ -13,16 +14,19 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/"        element={<Landing />}  />
-        <Route path="/explore" element={<Explore />}  />
-        <Route path="/auth"    element={<Auth />}     />
-        <Route path="/profile" element={
+        <Route path="/"             element={<Landing />}    />
+        <Route path="/explore"      element={<Explore />}    />
+        <Route path="/auth"         element={<Auth />}       />
+        <Route path="/profile"      element={
           <ProtectedRoute><Profile /></ProtectedRoute>
         } />
-        <Route path="/create" element={
+        <Route path="/create"       element={
           <ProtectedRoute><CreateTrip /></ProtectedRoute>
         } />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/edit-profile" element={
+          <ProtectedRoute><EditProfile /></ProtectedRoute>
+        } />
+        <Route path="*"             element={<NotFound />}   />
       </Routes>
     </BrowserRouter>
   )
