@@ -18,6 +18,7 @@ function Landing() {
           flexDirection: 'column',
           justifyContent: 'center',
           padding: '80px 64px 80px 80px',
+          width: '100%',
         }}>
 
           <div style={{
