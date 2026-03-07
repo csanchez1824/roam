@@ -127,9 +127,9 @@ export default function Landing() {
             Share your journey.<br />
             <em style={{ color: '#7ab8fb' }}>Inspire the world.</em>
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.95rem', fontWeight: '300', lineHeight: '1.65', maxWidth: '380px' }}>
-            Real trips. Real costs. Real travelers. Discover where to go next from people who've already been there.
-          </p>
+          <p style={{ color: 'white', fontSize: '0.95rem', fontWeight: '300', lineHeight: '1.65', maxWidth: '380px' }}>
+          Find where the world takes you next.
+        </p>
         </div>
 
         {/* Floating trip cards — row 1 */}
