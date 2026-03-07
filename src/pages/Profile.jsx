@@ -47,7 +47,7 @@ function Profile() {
 
   return (
     <div style={{ fontFamily: 'DM Sans, sans-serif', background: '#f0f2f5', minHeight: '100vh' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '28px 24px 80px', display: 'grid', gridTemplateColumns: '300px 1fr', gap: '24px', alignItems: 'start' }}>
+      <div className="profile-layout" style={{ maxWidth: '1100px', margin: '0 auto', padding: '28px 24px 80px', display: 'grid', gridTemplateColumns: '300px 1fr', gap: '24px', alignItems: 'start' }}>
 
         {/* SIDEBAR */}
         <aside style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>

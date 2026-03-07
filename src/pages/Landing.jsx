@@ -5,10 +5,10 @@ function Landing() {
     <div style={{ fontFamily: 'DM Sans, sans-serif' }}>
 
       {/* ── HERO ── */}
-      <section style={{
-        minHeight: '100vh',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+      <section className="hero-grid" style={{
+  minHeight: '100vh',
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
         background: '#ffffff',
       }}>
 
@@ -116,7 +116,7 @@ function Landing() {
         </div>
 
         {/* Right side — trip cards collage */}
-        <div style={{
+        <div className="hero-grid" style={{
           background: '#f8f7f4',
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',

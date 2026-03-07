@@ -14,3 +14,85 @@ body {
 a {
   text-decoration: none;
 }
+
+/* ── MOBILE RESPONSIVE ── */
+
+/* Navbar */
+@media (max-width: 768px) {
+  nav {
+    padding: 0 16px !important;
+  }
+}
+
+/* Landing hero — stack on mobile */
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-collage {
+    display: none !important;
+  }
+  .hero-text h1 {
+    font-size: 2.5rem !important;
+  }
+}
+
+/* Explore hero */
+@media (max-width: 768px) {
+  .explore-hero {
+    grid-template-columns: 1fr !important;
+    padding: 40px 24px !important;
+  }
+  .explore-globe {
+    display: none !important;
+  }
+  .explore-stats {
+    flex-wrap: wrap !important;
+  }
+}
+
+/* Main layout — sidebar below content on mobile */
+@media (max-width: 768px) {
+  .main-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .sidebar {
+    order: 2;
+  }
+  .main-content {
+    order: 1;
+  }
+}
+
+/* Trip grid — single column on mobile */
+@media (max-width: 640px) {
+  .trip-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Profile layout */
+@media (max-width: 768px) {
+  .profile-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Stats bar on explore hero */
+@media (max-width: 768px) {
+  .stats-bar {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    width: 100% !important;
+  }
+}
+
+/* Navbar links — hide on mobile */
+@media (max-width: 640px) {
+  .nav-links {
+    display: none !important;
+  }
+  .nav-mobile {
+    display: flex !important;
+  }
+}

@@ -59,7 +59,7 @@ function Explore() {
     <div style={{ fontFamily: 'DM Sans, sans-serif', background: '#f0f2f5', minHeight: '100vh' }}>
 
       {/* HERO */}
-      <div style={{ background: 'linear-gradient(135deg, #0a1628 0%, #0f2545 40%, #0a3d62 100%)', padding: '64px 56px', display: 'grid', gridTemplateColumns: '1fr 1fr', alignItems: 'center', minHeight: '380px', position: 'relative', overflow: 'hidden' }}>
+      <div className="explore-hero" style={{ background: 'linear-gradient(135deg, #0a1628 0%, #0f2545 40%, #0a3d62 100%)', padding: '64px 56px', display: 'grid', gridTemplateColumns: '1fr 1fr', alignItems: 'center', minHeight: '380px', position: 'relative', overflow: 'hidden' }}>
         {[...Array(20)].map((_, i) => (
           <div key={i} style={{ position: 'absolute', width: i % 3 === 0 ? '2px' : '1px', height: i % 3 === 0 ? '2px' : '1px', background: 'rgba(255,255,255,0.7)', borderRadius: '50%', top: `${Math.sin(i * 137.5) * 50 + 50}%`, left: `${Math.cos(i * 137.5) * 50 + 50}%` }} />
         ))}
@@ -83,7 +83,7 @@ function Explore() {
             ))}
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="explore-globe" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ width: '260px', height: '260px', borderRadius: '50%', background: 'radial-gradient(circle at 35% 35%, #1a6bb5, #0a2a52 60%, #040f1a)', boxShadow: '0 0 60px rgba(26,107,181,0.4)' }} />
         </div>
       </div>
@@ -106,7 +106,7 @@ function Explore() {
       </div>
 
       {/* MAIN BODY */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '28px 24px 80px', display: 'grid', gridTemplateColumns: '1fr 280px', gap: '24px' }}>
+      <div className="main-layout" style={{ maxWidth: '1200px', margin: '0 auto', padding: '28px 24px 80px', display: 'grid', gridTemplateColumns: '1fr 280px', gap: '24px' }}>
 
         <div>
           <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: '1.3rem', marginBottom: '16px' }}>⭐ Trip of the Week</h2>
@@ -126,7 +126,7 @@ function Explore() {
             <Link to="/create" style={{ background: '#0082fb', color: 'white', padding: '8px 18px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: '600', textDecoration: 'none' }}>✚ Post a Trip</Link>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="trip-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             {trips.length === 0 ? (
               <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 20px', color: '#65676b', background: 'white', borderRadius: '14px', border: '1px solid #dde1e7' }}>
                 <div style={{ fontSize: '3rem', marginBottom: '12px' }}>🌍</div>
